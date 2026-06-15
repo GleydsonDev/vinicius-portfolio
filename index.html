@@ -87,20 +87,16 @@
         </div>
       </div>
 
-      <!-- Lado direito: um celular tocando um vídeo dele (autoplay, mudo, loop) -->
+      <!-- Lado direito: vídeo em tela cheia -->
       <div class="hero-fone">
-        <div class="fone-moldura">
-          <div class="fone-notch"></div>
-          <video class="fone-video" id="heroVideo"
-                 src="img/videos/pedro.mp4"
-                 poster="img/videos-thumb/pedro.jpg"
-                 muted loop playsinline autoplay></video>
-          <!-- botão de som: o vídeo começa mudo; o usuário pode ativar -->
-          <button class="fone-som" id="btnSom" aria-label="Ativar som">
-            <span id="somIcone">🔇</span>
-          </button>
-        </div>
-        <div class="fone-glow"></div>
+        <video class="fone-video" id="heroVideo"
+               src="img/videos/pedro.mp4"
+               poster="img/videos-thumb/pedro.jpg"
+               muted loop playsinline autoplay></video>
+        <!-- botão de som: o vídeo começa mudo; o usuário pode ativar -->
+        <button class="fone-som" id="btnSom" aria-label="Ativar som">
+          <span id="somIcone">🔇</span>
+        </button>
       </div>
 
     </div>
@@ -157,14 +153,14 @@
     <div class="bloco-head">
       <span class="bloco-tc">CLIP 01 — 00:38</span>
       <h2 class="bloco-titulo">Trabalhos que <span class="azul">falam</span> por mim</h2>
-      <p class="bloco-sub">Passe o mouse sobre um vídeo pra ele tocar. Cada projeto é um problema resolvido.</p>
+    
     </div>
 
     <!-- Grade de vídeos verticais. Cada card toca o vídeo no hover (ver main.js).
          O destaque (data-destaque) ocupa mais espaço na grade. -->
     <div class="galeria" id="galeria">
 
-      <article class="vcard" data-destaque>
+      <article class="vcard">
         <div class="vcard-video">
           <video src="img/videos/ia-company.mp4" poster="img/videos-thumb/ia-company.jpg" muted loop playsinline preload="metadata"></video>
           <span class="vcard-badge">Depoimento</span>
@@ -197,14 +193,14 @@
         </div>
       </article>
 
-      <article class="vcard">
+      <article class="vcard" data-destaque>
         <div class="vcard-video">
           <video src="img/videos/agente-amanha.mp4" poster="img/videos-thumb/agente-amanha.jpg" muted loop playsinline preload="metadata"></video>
-          <span class="vcard-badge">Institucional</span>
+          <span class="vcard-badge">Anúncio</span>
         </div>
         <div class="vcard-info">
-          <h3 class="vcard-nome">Agente do Amanhã</h3>
-          <p class="vcard-cliente">Projeto institucional</p>
+          <h3 class="vcard-nome">Corretoras do Amanhã</h3>
+          <p class="vcard-cliente">1 Milhão através de anúncio</p>
         </div>
       </article>
 
@@ -263,17 +259,10 @@
         </div>
       </article>
 
-      <article class="vcard">
-        <div class="vcard-video">
-          <video src="img/videos/bnf.mp4" poster="img/videos-thumb/bnf.jpg" muted loop playsinline preload="metadata"></video>
-          <span class="vcard-badge">Social</span>
-        </div>
-        <div class="vcard-info">
-          <h3 class="vcard-nome">Vídeo institucional</h3>
-          <p class="vcard-cliente">BNF</p>
-        </div>
-      </article>
+    </div>
 
+    <div class="bloco-foot">
+      <h2 class="bloco-titulo-foot">Vídeos que venderam <span class="azul">+1 Milhão</span> através de anúncios</h2>
     </div>
   </section>
 
