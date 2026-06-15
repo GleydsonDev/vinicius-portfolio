@@ -433,11 +433,31 @@ body.js-anim .anim-up.dentro { opacity: 1; transform: none; }
 @media (max-width: 640px) {
   .nav-links { display: none; }
   .nav { padding: 16px 5vw; }
-  .stats { grid-template-columns: repeat(2, 1fr); gap: 30px 20px; }
+  .nav-cta { padding: 10px 16px; font-size: 14px; }
+  .stats { grid-template-columns: 1fr; gap: 20px; }
   .galeria { grid-template-columns: 1fr; }
   .vcard[data-destaque] { grid-column: span 1; }
   .processo { grid-template-columns: 1fr; }
   .cursor { display: none; } /* sem cursor custom no celular */
-  .hero { padding-top: 100px; }
-  .fone-moldura { width: 240px; }
+  .hero { padding-top: 90px; }
+  .hero-inner { gap: 28px; }
+  .hero-fone { order: -1; }
+  .fone-moldura { width: min(320px, 100%); }
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .btn { width: 100%; text-align: center; }
+  .bloco { padding: 70px 5vw; }
+  .bloco-head { margin-bottom: 36px; }
+  .bloco-sub { font-size: 15px; }
+  .vcard { transform: none; }
+  .vcard:hover { transform: none; }
+  .vcard-video { aspect-ratio: 9/16; }
+  .vcard-info { padding: 16px 14px 14px; }
+  .vcard-nome { font-size: 15px; }
+  .vcard-cliente { font-size: 12px; }
+  .sobre-grid { grid-template-columns: 1fr; }
+  .sobre-foto { max-width: 100%; }
+  .depo-grid { grid-template-columns: 1fr; }
+  .cta-final { padding: 80px 5vw; }
+  .rodape { padding: 24px 5vw; }
+  .timeline-trilho { display: none; } /* a timeline lateral some em telas menores */
 }

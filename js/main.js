@@ -75,33 +75,30 @@ document.addEventListener('DOMContentLoaded', () => {
     else { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; }
   });
 
-  document.querySelectorAll('.vcard').forEach((card) => {
-    card.addEventListener('mouseenter', () => {
-      cursor.classList.add('is-video');
-      cursorLabel.textContent = 'PLAY';
-    });
-    card.addEventListener('mouseleave', () => {
-      cursor.classList.remove('is-video');
-      cursorLabel.textContent = '';
-    });
-  });
-
-
-  /* ---------- 4. TOCAR VÍDEO NO HOVER ---------- */
-  // Ao passar o mouse, o vídeo toca; ao sair, pausa e volta ao início.
-  document.querySelectorAll('.vcard').forEach((card) => {
+  const vcards = document.querySelectorAll('.vcard');
+  vcards.forEach((card) => {
     const video = card.querySelector('video');
     if (!video) return;
 
     card.addEventListener('mouseenter', () => {
-      video.play().catch(() => {}); // catch evita erro se o navegador bloquear
+      cursor.classList.add('is-video');
+      video.play().catch(() => {});
     });
     card.addEventListener('mouseleave', () => {
+      cursor.classList.remove('is-video');
       video.pause();
       video.currentTime = 0;
     });
+
+    card.addEventListener('click', () => {
+      video.muted = !video.muted;
+      video.play().catch(() => {});
+    });
   });
 
+  /* ---------- 4. TOCAR VÍDEO NO HOVER ---------- */
+  // Ao passar o mouse, o vídeo toca; ao sair, pausa e volta ao início.
+  // Clique no card ativa/desativa o som do vídeo.
 
   /* ---------- 5. SOM DO VÍDEO DO HERO ---------- */
   const heroVideo = document.getElementById('heroVideo');
