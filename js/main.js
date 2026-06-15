@@ -76,29 +76,53 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const vcards = document.querySelectorAll('.vcard');
+  const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+
   vcards.forEach((card) => {
     const video = card.querySelector('video');
     if (!video) return;
 
-    card.addEventListener('mouseenter', () => {
+    const playVideo = () => {
       cursor.classList.add('is-video');
       video.play().catch(() => {});
-    });
-    card.addEventListener('mouseleave', () => {
+    };
+
+    const pauseVideo = () => {
       cursor.classList.remove('is-video');
       video.pause();
       video.currentTime = 0;
+    };
+
+    card.addEventListener('mouseenter', () => {
+      playVideo();
+    });
+    card.addEventListener('mouseleave', () => {
+      pauseVideo();
     });
 
     card.addEventListener('click', () => {
-      video.muted = !video.muted;
-      video.play().catch(() => {});
+      if (video.paused) {
+        video.muted = true;
+        playVideo();
+      } else {
+        video.muted = !video.muted;
+        video.play().catch(() => {});
+      }
     });
+
+    if (isTouchDevice) {
+      card.addEventListener('touchstart', () => {
+        if (video.paused) {
+          video.muted = true;
+          playVideo();
+        }
+      }, { passive: true });
+    }
   });
 
-  /* ---------- 4. TOCAR VÍDEO NO HOVER ---------- */
-  // Ao passar o mouse, o vídeo toca; ao sair, pausa e volta ao início.
-  // Clique no card ativa/desativa o som do vídeo.
+  /* ---------- 4. TOCAR VÍDEO NO HOVER / TOQUE ---------- */
+  // No desktop, o vídeo toca ao passar o mouse e pausa ao sair.
+  // No celular, um toque inicia o vídeo (mudo) e o clique alterna o som.
 
   /* ---------- 5. SOM DO VÍDEO DO HERO ---------- */
   const heroVideo = document.getElementById('heroVideo');
