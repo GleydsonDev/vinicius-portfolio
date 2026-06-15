@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<!--
+  PORTFÓLIO — VINICIUS SAMARONE (Videomaker & Editor)
+  ----------------------------------------------------
+  Estrutura do projeto:
+    index.html      -> este arquivo (o conteúdo/estrutura da página)
+    css/style.css   -> toda a aparência (cores, fontes, layout)
+    js/main.js      -> as interações (scroll, vídeos no hover, cursor)
+    img/            -> imagens, logos e vídeos
+
+  Conceito: a página inteira é montada como a "linha do tempo" de um editor
+  de vídeo. Um cabeçote (playhead) desce pela lateral conforme você rola,
+  e cada seção é um "clipe" com seu timecode.
+
+  Bibliotecas usadas (carregadas no final do arquivo):
+    - GSAP + ScrollTrigger: animações ligadas ao scroll
+    - Lenis: rolagem suave
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinicius Samarone — Videomaker & Editor</title>
+  <meta name="description" content="Videomaker e editor com mais de 7 anos de experiência. Gravação estratégica e edição profissional para empresas, influenciadores e marcas. Natal/RN e remoto para todo o Brasil.">
+
+  <!-- Fontes do Google: Sora (títulos), Inter (texto), JetBrains Mono (timecodes) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Cursor customizado: um círculo que segue o mouse. Vira "PLAY" sobre vídeos. -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <span class="cursor-label" id="cursorLabel"></span>
+  </div>
+
+  <!-- ════════════════ NAVEGAÇÃO ════════════════ -->
+  <nav class="nav" id="nav">
+    <a href="#topo" class="nav-logo">
+      <img src="img/logo-vs.svg" alt="VS" width="34" height="30">
+      <span>Vinicius Samarone</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#trabalhos">Trabalhos</a></li>
+      <li><a href="#metodo">Método</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+    </ul>
+    <a href="#contato" class="nav-cta">Ver orçamento</a>
+  </nav>
+
+  <!-- ════════════════ HERO ════════════════ -->
+  <header class="hero" id="topo">
+    <div class="hero-inner">
+
+      <!-- Lado esquerdo: apresentação -->
+      <div class="hero-texto">
+        <span class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          Videomaker &amp; Editor · 7+ anos
+        </span>
+
+        <h1 class="hero-titulo">
+          Gravação<br>
+          <span class="azul">estratégica.</span><br>
+          Não só gravação.
+        </h1>
+
+        <p class="hero-desc">
+          Eu dirijo, gravo e edito o conteúdo de quem precisa aparecer no digital
+          mas não tem tempo pra produzir. Você aparece — o resto é comigo.
+        </p>
+
+        <!-- Pílulas com check: os serviços, em formato de "tags" -->
+        <ul class="pills">
+          <li><span class="pill-check">✓</span> Edição profissional</li>
+          <li><span class="pill-check">✓</span> Entrega ágil</li>
+          <li><span class="pill-check">✓</span> Direção na gravação</li>
+          <li><span class="pill-check">✓</span> Atendimento remoto Brasil</li>
+        </ul>
+
+        <div class="hero-ctas">
+          <a href="#contato" class="btn btn-azul">Quero meu orçamento →</a>
+          <a href="#trabalhos" class="btn btn-vazio">Ver trabalhos</a>
+        </div>
+      </div>
+
+      <!-- Lado direito: um celular tocando um vídeo dele (autoplay, mudo, loop) -->
+      <div class="hero-fone">
+        <div class="fone-moldura">
+          <div class="fone-notch"></div>
+          <video class="fone-video" id="heroVideo"
+                 src="img/videos/pedro.mp4"
+                 poster="img/videos-thumb/pedro.jpg"
+                 muted loop playsinline autoplay></video>
+          <!-- botão de som: o vídeo começa mudo; o usuário pode ativar -->
+          <button class="fone-som" id="btnSom" aria-label="Ativar som">
+            <span id="somIcone">🔇</span>
+          </button>
+        </div>
+        <div class="fone-glow"></div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ════════════════ CONTADOR DE IMPACTO ════════════════ -->
+  <!-- data-alvo guarda o número final; o JS faz a contagem subir até ele -->
+  <section class="stats" aria-label="Números">
+    <div class="stat">
+      <div class="stat-num" data-alvo="7" data-sufixo="+">0</div>
+      <div class="stat-label">Anos de mercado</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-alvo="5" data-sufixo="+">0</div>
+      <div class="stat-label">Marcas atendidas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-alvo="100" data-sufixo="+">0</div>
+      <div class="stat-label">Vídeos entregues</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num-txt">Brasil</div>
+      <div class="stat-label">Atendimento remoto</div>
+    </div>
+  </section>
+
+  <!-- ════════════════ MARQUEE DE MARCAS ════════════════ -->
+  <!-- Faixa que rola sem parar. Os logos são duplicados no JS pra dar o loop. -->
+  <section class="marcas" aria-label="Marcas que confiam">
+    <p class="marcas-titulo">Quem já confiou no meu trabalho</p>
+    <div class="marquee" id="marquee">
+      <div class="marquee-track" id="marqueeTrack">
+        <img src="img/logos/honda.png" alt="Honda">
+        <img src="img/logos/hyundai.png" alt="Hyundai">
+        <img src="img/logos/jeep.png" alt="Jeep">
+        <img src="img/logos/viacerta.png" alt="Via Certa">
+        <img src="img/logos/BWF.png" alt="BWF Tecnologia">
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ TIMELINE (lateral) + SEÇÕES ════════════════ -->
+  <!-- A barra da timeline e o playhead ficam fixos na lateral (controlados via JS).
+       Cada seção abaixo tem um data-timecode que aparece como rótulo do "clipe". -->
+  <div class="timeline-trilho" id="timelineTrilho" aria-hidden="true">
+    <div class="timeline-linha"></div>
+    <div class="timeline-playhead" id="playhead">
+      <span class="playhead-tc" id="playheadTc">00:00</span>
+    </div>
+  </div>
+
+  <!-- ════════════════ TRABALHOS (galeria de vídeos 9:16) ════════════════ -->
+  <section class="bloco" id="trabalhos" data-timecode="00:38" data-clip="Trabalhos">
+    <div class="bloco-head">
+      <span class="bloco-tc">CLIP 01 — 00:38</span>
+      <h2 class="bloco-titulo">Trabalhos que <span class="azul">falam</span> por mim</h2>
+      <p class="bloco-sub">Passe o mouse sobre um vídeo pra ele tocar. Cada projeto é um problema resolvido.</p>
+    </div>
+
+    <!-- Grade de vídeos verticais. Cada card toca o vídeo no hover (ver main.js).
+         O destaque (data-destaque) ocupa mais espaço na grade. -->
+    <div class="galeria" id="galeria">
+
+      <article class="vcard" data-destaque>
+        <div class="vcard-video">
+          <video src="img/videos/ia-company.mp4" poster="img/videos-thumb/ia-company.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Depoimento</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Consultoria em IA</h3>
+          <p class="vcard-cliente">IA Company</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/pedro.mp4" poster="img/videos-thumb/pedro.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Anúncio</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Campanha de vendas</h3>
+          <p class="vcard-cliente">Pedro</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/via-certa.mp4" poster="img/videos-thumb/via-certa.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Evento</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Bloquinho da Innova</h3>
+          <p class="vcard-cliente">Via Certa</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/agente-amanha.mp4" poster="img/videos-thumb/agente-amanha.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Institucional</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Agente do Amanhã</h3>
+          <p class="vcard-cliente">Projeto institucional</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/estetica.mp4" poster="img/videos-thumb/estetica.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Anúncio</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Clínica de estética</h3>
+          <p class="vcard-cliente">Campanha local</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/diogo.mp4" poster="img/videos-thumb/diogo.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Social</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Conteúdo para redes</h3>
+          <p class="vcard-cliente">Diogo</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/joao.mp4" poster="img/videos-thumb/joao.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Social</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Presença digital</h3>
+          <p class="vcard-cliente">João</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/cta-bio.mp4" poster="img/videos-thumb/cta-bio.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Social</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Chamada pra ação</h3>
+          <p class="vcard-cliente">Link na bio</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/roteiro.mp4" poster="img/videos-thumb/roteiro.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Conteúdo</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Roteiro &amp; storytelling</h3>
+          <p class="vcard-cliente">Conteúdo educativo</p>
+        </div>
+      </article>
+
+      <article class="vcard">
+        <div class="vcard-video">
+          <video src="img/videos/bnf.mp4" poster="img/videos-thumb/bnf.jpg" loop playsinline preload="metadata"></video>
+          <span class="vcard-badge">Social</span>
+        </div>
+        <div class="vcard-info">
+          <h3 class="vcard-nome">Vídeo institucional</h3>
+          <p class="vcard-cliente">BNF</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ════════════════ MÉTODO / FILOSOFIA ════════════════ -->
+  <section class="bloco" id="metodo" data-timecode="01:24" data-clip="Método">
+    <div class="bloco-head">
+      <span class="bloco-tc">CLIP 02 — 01:24</span>
+      <h2 class="bloco-titulo">Como eu <span class="azul">trabalho</span></h2>
+      <p class="bloco-sub">Gravação com direcionamento e sentido. Do roteiro à entrega, cada etapa tem propósito.</p>
+    </div>
+
+    <!-- Processo em 4 passos. A numeração aqui faz sentido: é uma sequência real. -->
+    <ol class="processo">
+      <li class="passo">
+        <span class="passo-num">01</span>
+        <h3 class="passo-titulo">Roteirização</h3>
+        <p class="passo-desc">Antes de gravar, a gente planeja o que vai ser dito e como. Vídeo bom começa no roteiro.</p>
+      </li>
+      <li class="passo">
+        <span class="passo-num">02</span>
+        <h3 class="passo-titulo">Agendamento</h3>
+        <p class="passo-desc">Marcamos a gravação com calma, no melhor momento pra você render bem na frente da câmera.</p>
+      </li>
+      <li class="passo">
+        <span class="passo-num">03</span>
+        <h3 class="passo-titulo">Captação</h3>
+        <p class="passo-desc">No dia, eu te dirijo. Você não precisa saber atuar — eu conduzo pra sair natural.</p>
+      </li>
+      <li class="passo">
+        <span class="passo-num">04</span>
+        <h3 class="passo-titulo">Edição</h3>
+        <p class="passo-desc">Cortes, ritmo, legendas e finalização profissional. O material volta pronto pra postar.</p>
+      </li>
+    </ol>
+
+    <!-- Transparência do pagamento como diferencial de confiança -->
+    <div class="pagamento">
+      <span class="pagamento-tc">// como funciona o pagamento</span>
+      <p><strong>50%</strong> para iniciar o projeto · <strong>50%</strong> na entrega final. Simples e transparente.</p>
+    </div>
+  </section>
+
+  <!-- ════════════════ SOBRE ════════════════ -->
+  <section class="bloco sobre" id="sobre" data-timecode="02:10" data-clip="Sobre">
+    <div class="sobre-grid">
+      <div class="sobre-foto-wrap">
+        <img src="img/vinicius.jpg" alt="Vinicius Samarone" class="sobre-foto">
+        <span class="sobre-foto-tag">Vinicius Samarone</span>
+      </div>
+      <div class="sobre-texto">
+        <span class="bloco-tc">CLIP 03 — 02:10</span>
+        <h2 class="bloco-titulo">Sobre <span class="azul">mim</span></h2>
+        <p>São mais de 7 anos no mercado audiovisual. Comecei na Honda e fui crescendo, atendendo empresários do ramo de empreendedorismo, desenvolvimento pessoal, marketing e muitos outros nichos.</p>
+        <p>Meu trabalho é gravação e edição com estratégia: não basta apontar a câmera, o vídeo precisa ter direção e sentido pra realmente conectar com quem assiste.</p>
+        <p>Atendo presencialmente em Natal/RN e faço edição remota pra todo o Brasil, inclusive para influenciadores.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ DEPOIMENTOS ════════════════ -->
+  <section class="bloco depoimentos" data-timecode="02:48" data-clip="Depoimentos">
+    <div class="bloco-head">
+      <span class="bloco-tc">CLIP 04 — 02:48</span>
+      <h2 class="bloco-titulo">O que dizem</h2>
+    </div>
+    <div class="depo-grid">
+      <blockquote class="depo">
+        <p>"O Vinicius não só gravou, ele direcionou tudo. Eu só precisei aparecer e falar — o resto ele resolveu. Entrega rápida e com qualidade de quem entende do assunto."</p>
+        <footer><span class="depo-nome">Cliente</span> · <span class="depo-empresa">Empreendedorismo</span></footer>
+      </blockquote>
+      <blockquote class="depo">
+        <p>"Eu sabia que precisava postar mais, mas não tinha tempo nem saco pra editar. Mandei os vídeos crus e ele devolveu um material profissional que mudou a percepção da minha marca."</p>
+        <footer><span class="depo-nome">Cliente</span> · <span class="depo-empresa">Marketing</span></footer>
+      </blockquote>
+      <blockquote class="depo">
+        <p>"Trabalho com ele há meses de forma remota e nunca tive problema. Edição estratégica, no prazo, e sempre entendendo o que a minha audiência quer ver. Recomendo de olhos fechados."</p>
+        <footer><span class="depo-nome">Cliente</span> · <span class="depo-empresa">Criador de conteúdo</span></footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ════════════════ CTA FINAL / CONTATO ════════════════ -->
+  <section class="cta-final" id="contato" data-timecode="03:30" data-clip="Contato">
+    <span class="bloco-tc">FIM DA TIMELINE — 03:30</span>
+    <h2 class="cta-titulo">Vamos gravar<br>algo <span class="azul">bom</span>?</h2>
+    <p class="cta-sub">Me chama no WhatsApp e a gente monta o orçamento do seu projeto.</p>
+    <!-- O href já abre o WhatsApp com uma mensagem pronta -->
+    <a class="btn btn-azul btn-grande"
+       href="https://wa.me/5584991382665?text=Ol%C3%A1%20Vinicius!%20Vi%20seu%20portf%C3%B3lio%20e%20quero%20um%20or%C3%A7amento."
+       target="_blank" rel="noopener">
+      Pedir orçamento no WhatsApp →
+    </a>
+    <div class="cta-contatos">
+      <a href="https://instagram.com/viniciussamarone" target="_blank" rel="noopener">@viniciussamarone</a>
+      <span>·</span>
+      <a href="mailto:viniciussamarone4@gmail.com">viniciussamarone4@gmail.com</a>
+      <span>·</span>
+      <a href="https://wa.me/5584991382665" target="_blank" rel="noopener">(84) 99138-2665</a>
+    </div>
+  </section>
+
+  <!-- ════════════════ RODAPÉ ════════════════ -->
+  <footer class="rodape">
+    <div class="rodape-logo">
+      <img src="img/logo-vs.svg" alt="VS" width="28" height="25">
+      <span>Vinicius Samarone</span>
+    </div>
+    <p class="rodape-copy">© 2025 Vinicius Samarone — Videomaker &amp; Editor · Natal/RN</p>
+  </footer>
+
+  <!-- ═══════════ BIBLIOTECAS (CDN) ═══════════ -->
+  <!-- GSAP: motor de animação (usado no contador e no movimento do cursor) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Lenis: rolagem suave (smooth scroll) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.0.42/lenis.min.js"></script>
+
+  <!-- Nosso código, sempre por último -->
+  <script src="js/main.js"></script>
+</body>
+</html>
